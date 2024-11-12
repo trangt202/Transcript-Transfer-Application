@@ -1,0 +1,68 @@
+/* Home.module.css */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #121212, #1c1c1c); /* Dark gradient background */
+    color: #e0e0e0;
+    text-align: center;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif; /* Optional: use a modern sans-serif font */
+  }
+  
+  .home-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ffffff;
+    letter-spacing: 1.2px;
+  }
+  
+  .home-subtitle {
+    font-size: 1.1rem;
+    color: #cccccc; /* Slightly lighter for better readability */
+    margin-bottom: 50px;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 30px;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .home-button {
+    padding: 15px 40px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #292929;
+    color: #ffffff;
+    border: 2px solid #444444;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Soft shadow for modern effect */
+  }
+  
+  .home-button:hover {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border-color: #666666;
+    transform: translateY(-3px); /* Slight lift on hover */
+  }
+  
+  .button-description {
+    font-size: 0.85rem;
+    color: #999999; /* Softer gray for description */
+    margin-top: 8px;
+    text-align: center;
+    max-width: 180px;
+    line-height: 1.4;
+  }
+  

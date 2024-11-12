@@ -1,0 +1,108 @@
+/* Login.module.css */
+
+.loginWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #121212; /* Dark background */
+  }
+  
+  .loginBox {
+    background-color: #1e1e1e; /* Darker box to contrast with background */
+    padding: 40px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 100%;
+    max-width: 360px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #ffffff; /* White text for visibility */
+    margin-bottom: 25px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .inputContainer {
+    margin-bottom: 18px;
+  }
+  
+  .inputBox {
+    width: 90%;
+    padding: 8px; /* Reduced padding for smaller size */
+    border-radius: 5px;
+    border: 1px solid #333; /* Darker border to blend with dark theme */
+    font-size: 14px; /* Slightly smaller font size */
+    transition: all 0.3s ease;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .inputBox::placeholder {
+    color: #888888; /* Dark gray placeholder for contrast */
+  }
+  
+  .inputBox:focus {
+    border-color: #3b82f6;
+    background-color: #333333;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .loginButton {
+    width: 60%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .loginButton:disabled {
+    background: #3a4a67;
+    cursor: not-allowed;
+  }
+  
+  .loginButton:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+  }
+  
+  .registerContainer {
+    margin-top: 25px;
+  }
+  
+  .registerText {
+    font-size: 14px;
+    color: #b0b0b0; /* Lighter gray for dark theme */
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .registerLink {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .registerLink:hover {
+    color: #3b82f6;
+    text-decoration: underline;
+  }
+  
+  .errorText {
+    color: #ff4d4d; /* Bright red for visibility on dark background */
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
