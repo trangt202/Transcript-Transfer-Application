@@ -1,19 +1,36 @@
 /* ViewTranscript.module.css */
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #1e1e1e;
+}
+
 .view-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #1c1c1c; /* Matches "Create Transcript" background */
-  color: #e0e0e0;
+  background-color: #1e1e1e;
   padding: 20px;
+}
+.title {
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+.detailsTitle {
+  color:#cccccc;
+  margin-bottom: 50px;
 }
 
 .view-title {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #cccccc;
+  color: #e4e4e4;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -22,7 +39,7 @@
   background-color: #2b2b2b;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Matches the shadow on the "Create Transcript" page */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   width: 300px;
   max-width: 90%;
   margin-bottom: 20px;
@@ -40,7 +57,7 @@
   background-color: #2b2b2b;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Matches the shadow on the "Create Transcript" page */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .courses-title {
@@ -59,7 +76,96 @@
 }
 
 .course-entry p {
-  font-size: 0.9rem;
-  margin: 3px 0;
-  color: #bbbbbb;
+  background-color: #333333;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.container {
+  background-color: #1e1e1e;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.status {
+  margin-bottom: 20px;
+  color: #cccccc;
+}
+
+.searchForm {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #2a2a2a;
+  color: #ffffff;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ff6b6b;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #2b2b2b;
+  border-radius: 4px;
+}
+
+.transcriptContainer {
+  background-color: #2b2b2b;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.transcriptDetails {
+  display: flex;
+  color: #cccccc;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.row {
+  display: flex;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+}
+
+.label {
+  flex: 0 0 150px;
+  font-weight: bold;
+  color: #cccccc;
+}
+
+.value {
+  flex: 1;
+  color: #ffffff;
+  white-space: pre-line;
+}
+
+.status.value {
+  color: #4ade80;
+  font-weight: bold;
 }
