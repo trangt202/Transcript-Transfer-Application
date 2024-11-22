@@ -5,6 +5,13 @@ import styles from './IssueTranscript.module.css';
 function IssueTranscript() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [transcriptId, setTranscriptId] = useState(null);
+  const [formData, setFormData] = useState({
+    studentName: '',
+    dateOfBirth: '',
+    studentID: '',
+    transcriptDetails: ''
+  });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const initBlockchain = async () => {
@@ -14,27 +21,46 @@ function IssueTranscript() {
         console.log('Web3 initialized successfully!');
       } catch (error) {
         console.error('Failed to initialize blockchain:', error);
+        setError('Failed to connect to blockchain');
       }
     };
 
     initBlockchain();
   }, []);
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     
+    // Basic validation
+    if (!formData.studentName || !formData.dateOfBirth || !formData.studentID || !formData.transcriptDetails) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     try {
-      const result = await Blockchain.issueTranscript({
-        studentName: "Jane Doe",
-        dateOfBirth: "2000-01-01",
-        studentID: "502702682",
-        transcriptDetails: "CSC 196D: A\n CSC 133: A\n CSC 135: A\n GPA: 3.9"
-      });
-      
+      const result = await Blockchain.issueTranscript(formData);
       setTranscriptId(result);
       console.log('Transcript issued:', result);
+      
+      // Clear form after successful submission
+      setFormData({
+        studentName: '',
+        dateOfBirth: '',
+        studentID: '',
+        transcriptDetails: ''
+      });
     } catch (error) {
       console.error('Error:', error);
+      setError('Failed to issue transcript. Please try again.');
     }
   };
 
@@ -44,13 +70,69 @@ function IssueTranscript() {
       <div className={styles.status}>
         Status: {isInitialized ? 'Connected to blockchain' : 'Initializing...'}
       </div>
-      <button 
-        onClick={handleSubmit} 
-        disabled={!isInitialized}
-        className={styles.button}
-      >
-        Test Issue Transcript
-      </button>
+
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles['form-group']}>
+          <label htmlFor="studentName">Student Name:</label>
+          <input
+            type="text"
+            id="studentName"
+            name="studentName"
+            value={formData.studentName}
+            onChange={handleInputChange}
+            placeholder="Enter student name"
+            disabled={!isInitialized}
+          />
+        </div>
+
+        <div className={styles['form-group']}>
+          <label htmlFor="dateOfBirth">Date of Birth:</label>
+          <input
+            type="date"
+            id="dateOfBirth"
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            onChange={handleInputChange}
+            disabled={!isInitialized}
+          />
+        </div>
+
+        <div className={styles['form-group']}>
+          <label htmlFor="studentID">Student ID:</label>
+          <input
+            type="text"
+            id="studentID"
+            name="studentID"
+            value={formData.studentID}
+            onChange={handleInputChange}
+            placeholder="Enter student ID"
+            disabled={!isInitialized}
+          />
+        </div>
+
+        <div className={styles['form-group']}>
+          <label htmlFor="transcriptDetails">Transcript Details:</label>
+          <textarea
+            id="transcriptDetails"
+            name="transcriptDetails"
+            value={formData.transcriptDetails}
+            onChange={handleInputChange}
+            placeholder="Enter transcript details (e.g., Course: Grade)"
+            disabled={!isInitialized}
+            rows={5}
+          />
+        </div>
+
+        {error && <div className={styles.error}>{error}</div>}
+
+        <button 
+          type="submit" 
+          disabled={!isInitialized}
+          className={styles.button}
+        >
+          Issue Transcript
+        </button>
+      </form>
       
       {transcriptId && (
         <div className={styles['transcript-id']}>
