@@ -1,75 +1,150 @@
-// src/pages/issue/IssueTranscript.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Blockchain from '../../components/Blockchain.js';
 import styles from './IssueTranscript.module.css';
 
 function IssueTranscript() {
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [transcriptId, setTranscriptId] = useState(null);
   const [formData, setFormData] = useState({
     studentName: '',
     dateOfBirth: '',
     studentID: '',
-    transcriptDetails: '',
+    transcriptDetails: ''
   });
+  const [error, setError] = useState(null);
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    const initBlockchain = async () => {
+      try {
+        await Blockchain.initialize();
+        setIsInitialized(true);
+        console.log('Web3 initialized successfully!');
+      } catch (error) {
+        console.error('Failed to initialize blockchain:', error);
+        setError('Failed to connect to blockchain');
+      }
+    };
+
+    initBlockchain();
+  }, []);
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add submission logic here (e.g., send data to a server or blockchain)
-    console.log('Form data submitted:', formData);
+    setError(null);
+    
+    // Basic validation
+    if (!formData.studentName || !formData.dateOfBirth || !formData.studentID || !formData.transcriptDetails) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    try {
+      const result = await Blockchain.issueTranscript(formData);
+      setTranscriptId(result);
+      console.log('Transcript issued:', result);
+      
+      // Clear form after successful submission
+      setFormData({
+        studentName: '',
+        dateOfBirth: '',
+        studentID: '',
+        transcriptDetails: ''
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Failed to issue transcript. Please try again.');
+    }
   };
 
   return (
     <div className={styles['issue-container']}>
-      <h1 className={styles['form-title']}>Create Transcript</h1>
-      <form className={styles['issue-form']} onSubmit={handleSubmit}>
-        <label className={styles['form-label']}>Student Name</label>
-        <input
-          type="text"
-          name="studentName"
-          value={formData.studentName}
-          onChange={handleChange}
-          className={styles['form-input']}
-          placeholder="Alice Doe"
-        />
+      <h1 className={styles.title}>Issue Transcript</h1>
+      <div className={styles.status}>
+        Status: {isInitialized ? 'Connected to blockchain' : 'Initializing...'}
+      </div>
 
-        <label className={styles['form-label']}>Date of Birth</label>
-        <input
-          type="date"
-          name="dateOfBirth"
-          value={formData.dateOfBirth}
-          onChange={handleChange}
-          className={styles['form-input']}
-        />
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles['form-group']}>
+          <label htmlFor="studentName">Student Name:</label>
+          <input
+            type="text"
+            id="studentName"
+            name="studentName"
+            value={formData.studentName}
+            onChange={handleInputChange}
+            placeholder="Enter student name"
+            disabled={!isInitialized}
+          />
+        </div>
 
-        <label className={styles['form-label']}>Student ID</label>
-        <input
-          type="text"
-          name="studentID"
-          value={formData.studentID}
-          onChange={handleChange}
-          className={styles['form-input']}
-          placeholder="S4277804"
-        />
+        <div className={styles['form-group']}>
+          <label htmlFor="dateOfBirth">Date of Birth:</label>
+          <input
+            type="date"
+            id="dateOfBirth"
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            onChange={handleInputChange}
+            disabled={!isInitialized}
+          />
+        </div>
 
-        <label className={styles['form-label']}>Transcript Details</label>
-        <textarea
-          name="transcriptDetails"
-          value={formData.transcriptDetails}
-          onChange={handleChange}
-          className={styles['form-textarea']}
-          placeholder="Fall 2021 - CSC 1960 - A+"
-        />
+        <div className={styles['form-group']}>
+          <label htmlFor="studentID">Student ID:</label>
+          <input
+            type="text"
+            id="studentID"
+            name="studentID"
+            value={formData.studentID}
+            onChange={handleInputChange}
+            placeholder="Enter student ID"
+            disabled={!isInitialized}
+          />
+        </div>
 
-        <button type="submit" className={styles['submit-button']}>
-          Submit
+        <div className={styles['form-group']}>
+          <label htmlFor="transcriptDetails">Transcript Details:</label>
+          <textarea
+            id="transcriptDetails"
+            name="transcriptDetails"
+            value={formData.transcriptDetails}
+            onChange={handleInputChange}
+            placeholder="Enter transcript details (e.g., Course: Grade)"
+            disabled={!isInitialized}
+            rows={5}
+          />
+        </div>
+
+        {error && <div className={styles.error}>{error}</div>}
+
+        <button 
+          type="submit" 
+          disabled={!isInitialized}
+          className={styles.button}
+        >
+          Issue Transcript
         </button>
       </form>
+      
+      {transcriptId && (
+        <div className={styles['transcript-id']}>
+          <h3>Transcript ID:</h3>
+          <p>{transcriptId}</p>
+          <p className={styles['helper-text']}>
+            Save this ID to view the transcript later
+          </p>
+        </div>
+      )}
     </div>
   );
 }
 
 export default IssueTranscript;
-

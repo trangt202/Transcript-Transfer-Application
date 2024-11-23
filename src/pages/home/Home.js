@@ -15,13 +15,13 @@ function Home() {
           <button className={styles['home-button']} onClick={() => navigate('/issue')}>
             Issue Transcript
           </button>
-          <p className={styles['button-description']}>Requires login, University staff only</p>
+          <p className={styles['button-description']}>University staff only</p>
         </div>
         <div className={styles['button-group']}>
           <button className={styles['home-button']} onClick={() => navigate('/view')}>
             View Transcript
           </button>
-          <p className={styles['button-description']}>Students, employers, other</p>
+          <p className={styles['button-description']}>Students, employers, other (Requires Transcript ID)</p>
         </div>
       </div>
     </div>
