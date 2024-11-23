@@ -2,6 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Blockchain from '../../components/Blockchain.js';
 import styles from './IssueTranscript.module.css';
 
+
+//----------------------------------------------------------
+//download ipfs: https://github.com/ipfs/kubo/releases
+//put the ipfs file into /usr/local/bin folder
+//terminal:   ipfs init   , then     ipfs daemon     to start
+
+const ipfsHttpClient = require('ipfs-http-client');
+
+const ipfs = ipfsHttpClient('http://127.0.0.1:5002'); 
+//----------------------------------------------------------
+
+
 function IssueTranscript() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [transcriptId, setTranscriptId] = useState(null);
@@ -12,6 +24,7 @@ function IssueTranscript() {
     transcriptDetails: ''
   });
   const [error, setError] = useState(null);
+  const [cid, setCid] = useState(null);
 
   useEffect(() => {
     const initBlockchain = async () => {
@@ -47,7 +60,15 @@ function IssueTranscript() {
     }
 
     try {
-      const result = await Blockchain.issueTranscript(formData);
+    
+      const ipfsData = JSON.stringify(formData);
+      const added = await ipfs.add(ipfsData);
+      const cid = added.path;
+      console.log("Data stored on IPFS, cid = ", cid);
+      setCid(cid);
+    
+          
+      const result = await Blockchain.issueTranscript(cid);
       setTranscriptId(result);
       console.log('Transcript issued:', result);
       

@@ -3,82 +3,37 @@ pragma solidity ^0.8.0;
 
 contract TranscriptContract {
     struct Transcript {
-        string studentName;
-        string dateOfBirth;
-        string studentID;
-        string transcriptDetails;
-        uint256 timestamp;
-        bool isValid;
+        string cid;
+        address owner;
     }
 
-    mapping(bytes32 => Transcript) private transcripts;
+    mapping(uint256 => Transcript) private transcripts;
     
-    event TranscriptIssued(bytes32 indexed transcriptId, string studentName, uint256 timestamp);
-    event TranscriptVerified(bytes32 indexed transcriptId, address verifier);
+    uint256 public transcriptCount;
+    
+    event TranscriptIssued(uint256 indexed transcriptId, string cid, address owner);
+    event TranscriptVerified(uint256 indexed transcriptId, address verifier);
 
     constructor() {
         // Empty constructor
     }
 
-    function issueTranscript(
-        string memory studentName,
-        string memory dateOfBirth,
-        string memory studentID,
-        string memory transcriptDetails
-
-    ) public returns (bytes32) {
-
-
-        // Generate a unique transcript ID using keccak256
-        bytes32 transcriptId = keccak256(
-            abi.encodePacked(
-                studentName,
-                dateOfBirth,
-                studentID,
-                transcriptDetails,
-                block.timestamp
-            )
-        );
-
-        // Ensure transcript ID doesn't already exist
-        require(!transcripts[transcriptId].isValid, "Transcript already exists");
-
+    function issueTranscript(string memory cid) public {
+    
         // Store the transcript
-        transcripts[transcriptId] = Transcript({
-            studentName: studentName,
-            dateOfBirth: dateOfBirth,
-            studentID: studentID,
-            transcriptDetails: transcriptDetails,
-            timestamp: block.timestamp,
-            isValid: true
+        transcripts[transcriptCount] = Transcript({
+            cid: cid,
+            owner: msg.sender
         });
 
-        emit TranscriptIssued(transcriptId, studentName, block.timestamp);
-        return transcriptId;
+        emit TranscriptIssued(transcriptCount, cid, msg.sender);
+        transcriptCount++;
     }
 
-    function getTranscript(bytes32 transcriptId) 
-        public 
-        view 
-        returns (
-            string memory studentName,
-            string memory dateOfBirth,
-            string memory studentID,
-            string memory transcriptDetails,
-            uint256 timestamp,
-            bool isValid
-        ) 
+    function getTranscript(uint256 transcriptId) public view returns (string memory) 
     {
-        require(transcripts[transcriptId].isValid, "Transcript does not exist");
+        require(transcripts[transcriptId].owner == msg.sender, "Not authorized");
         
-        Transcript memory transcript = transcripts[transcriptId];
-        return (
-            transcript.studentName,
-            transcript.dateOfBirth,
-            transcript.studentID,
-            transcript.transcriptDetails,
-            transcript.timestamp,
-            transcript.isValid
-        );
+        return transcripts[transcriptId].cid;
     }
 }

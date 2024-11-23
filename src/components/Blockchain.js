@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import TranscriptContract from '../contracts/TranscriptContract.json';
+import TranscriptContract from '../build/contracts/TranscriptContract.json';
 
 class Blockchain{
   constructor() {
@@ -7,6 +7,8 @@ class Blockchain{
     this.contract = null;
     this.accounts = null;
   }
+  
+  
 
   async initialize() {
     try {
@@ -50,16 +52,11 @@ class Blockchain{
     }
   }
 
-  async issueTranscript(transcriptData) {
+  async issueTranscript(cid) {
     try {
       const gasPrice = await this.web3.eth.getGasPrice();
       const result = await this.contract.methods
-        .issueTranscript(
-          transcriptData.studentName,
-          transcriptData.dateOfBirth,
-          transcriptData.studentID,
-          transcriptData.transcriptDetails
-        )
+        .issueTranscript(cid)
         .send({
           from: this.accounts[0],
           gas: 1500000,
@@ -68,6 +65,7 @@ class Blockchain{
       
       // Return the transcriptId from the event
       const transcriptId = result.events.TranscriptIssued.returnValues.transcriptId;
+      console.log('TranscriptID: ', transcriptId);
       return transcriptId;
     } catch (error) {
       console.error('Error issuing transcript:', error);
@@ -75,18 +73,9 @@ class Blockchain{
     }
   }
 
-  async getTranscript(transcriptId) {
-    try {
-      const transcript = await this.contract.methods
-        .getTranscript(transcriptId)
-        .call();
 
-      return transcript;
-    } catch (error) {
-      console.error('Error getting transcript:', error);
-      throw error;
-    }
-  }
+
+  
 }
 
 export default new Blockchain();

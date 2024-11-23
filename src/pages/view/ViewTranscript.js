@@ -3,10 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import Blockchain from '../../components/Blockchain';
 import styles from './ViewTranscript.module.css';
+import {Buffer} from 'buffer';
+
+const ipfsHttpClient = require('ipfs-http-client');
+const ipfs = ipfsHttpClient('http://127.0.0.1:5002');
 
 function ViewTranscript() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [transcriptId, setTranscriptId] = useState('');
+  const [cid, setCid] = useState('');
   const [transcript, setTranscript] = useState(null);
   const [error, setError] = useState(null);
 
@@ -30,24 +35,27 @@ function ViewTranscript() {
     setError(null);
     setTranscript(null);
 
-    if (!transcriptId.trim()) {
-      setError('Please enter a transcript ID');
+    if (!cid.trim()) {
+      setError('Please enter a CID');
       return;
     }
 
     try {
-      const result = await Blockchain.getTranscript(transcriptId);
-      setTranscript({
-        studentName: result.studentName,
-        dateOfBirth: result.dateOfBirth,
-        studentID: result.studentID,
-        transcriptDetails: result.transcriptDetails,
-        timestamp: new Date(Number(result.timestamp) * 1000).toLocaleString(),
-        isValid: result.isValid
-      });
+      
+      const fields = [];
+      //get input for every field of the transcript form
+      for await (const field of ipfs.cat(cid)){
+        fields.push(field);
+      }
+      //create a single json file with all of the data
+      const data = JSON.parse(Buffer.concat(fields).toString());
+     
+      console.log('Fetched transcript data from IPFS: ', data);
+      setTranscript(data);
+      
     } catch (error) {
       console.error('Error fetching transcript:', error);
-      setError('Failed to fetch transcript. Please check the ID and try again.');
+      setError('Failed to fetch transcript. Please check the CID and try again.');
     }
   };
 
@@ -62,9 +70,9 @@ function ViewTranscript() {
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <input
           type="text"
-          value={transcriptId}
-          onChange={(e) => setTranscriptId(e.target.value)}
-          placeholder="Enter Transcript ID"
+          value={cid}
+          onChange={(e) => setCid(e.target.value)}
+          placeholder="Enter CID"
           className={styles.input}
           disabled={!isInitialized}
         />
