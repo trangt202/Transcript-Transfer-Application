@@ -53,7 +53,7 @@ function IssueTranscript() {
     e.preventDefault();
     setError(null);
     
-    // Basic validation
+    //validation
     if (!formData.studentName || !formData.dateOfBirth || !formData.studentID || !formData.transcriptDetails) {
       setError('Please fill in all fields');
       return;
@@ -64,13 +64,12 @@ function IssueTranscript() {
       const ipfsData = JSON.stringify(formData);
       const added = await ipfs.add(ipfsData);
       const cid = added.path;
-      console.log("Data stored on IPFS, cid = ", cid);
+      //console.log("Data stored on IPFS, cid = ", cid);
       setCid(cid);
     
           
       const result = await Blockchain.issueTranscript(cid);
       setTranscriptId(result);
-      console.log('Transcript issued:', result);
       
       // Clear form after successful submission
       setFormData({
@@ -80,7 +79,6 @@ function IssueTranscript() {
         transcriptDetails: ''
       });
     } catch (error) {
-      console.error('Error:', error);
       setError('Failed to issue transcript. Please try again.');
     }
   };

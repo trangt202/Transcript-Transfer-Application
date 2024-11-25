@@ -20,9 +20,7 @@ function ViewTranscript() {
       try {
         await Blockchain.initialize();
         setIsInitialized(true);
-        console.log('Web3 initialized successfully!');
       } catch (error) {
-        console.error('Failed to initialize blockchain:', error);
         setError('Failed to connect to blockchain');
       }
     };
@@ -54,7 +52,6 @@ function ViewTranscript() {
       setTranscript(data);
       
     } catch (error) {
-      console.error('Error fetching transcript:', error);
       setError('Failed to fetch transcript. Please check the CID and try again.');
     }
   };
