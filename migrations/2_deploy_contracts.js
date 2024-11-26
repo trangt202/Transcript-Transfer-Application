@@ -1,7 +1,7 @@
-var Verification = artifacts.require("./TranscriptVerification.sol");
+var TranscriptContract = artifacts.require("./TranscriptContract.sol");
 
 module.exports = function (deployer) {
-	deployer.deploy(Verification, {
+	deployer.deploy(TranscriptContract, {
 	gas: 6000000
 	});
 	
