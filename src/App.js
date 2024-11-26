@@ -6,6 +6,7 @@ import Home from './pages/home/Home';
 import './App.css';
 import IssueTranscript from './pages/issue/IssueTranscript';
 import ViewTranscript from './pages/view/ViewTranscript';
+import ConnectWallet from './components/ConnectWallet';
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -13,6 +14,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <ConnectWallet account={account} setAccount={setAccount} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
