@@ -64,8 +64,8 @@ class Blockchain{
         });
       
       // Return the transcriptId from the event
-      const transcriptId = result.events.TranscriptIssued.returnValues.transcriptId;
-      console.log('TranscriptID: ', transcriptId);
+      const transcriptId = result.events.TranscriptIssued.returnValues.cid;
+      console.log('TranscriptID: ', cid);
       return transcriptId;
     } catch (error) {
       console.error('Error issuing transcript:', error);
