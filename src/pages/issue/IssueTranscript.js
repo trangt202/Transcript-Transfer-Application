@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Blockchain from '../../components/Blockchain.js';
 import styles from './IssueTranscript.module.css';
+import {encrypt, decrypt} from '../../components/Encryption.js';
 
 
 //----------------------------------------------------------
@@ -60,9 +61,12 @@ function IssueTranscript() {
     }
 
     try {
-    
+      
       const ipfsData = JSON.stringify(formData);
-      const added = await ipfs.add(ipfsData);
+      const encryptedData = encrypt(ipfsData);
+
+      
+      const added = await ipfs.add(encryptedData);
       const cid = added.path;
       //console.log("Data stored on IPFS, cid = ", cid);
       setCid(cid);

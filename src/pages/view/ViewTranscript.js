@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Blockchain from '../../components/Blockchain';
 import styles from './ViewTranscript.module.css';
+import {decrypt} from '../../components/Encryption';
 import {Buffer} from 'buffer';
 
 const ipfsHttpClient = require('ipfs-http-client');
@@ -34,7 +35,7 @@ function ViewTranscript() {
     setTranscript(null);
 
     if (!cid.trim()) {
-      setError('Please enter a CID');
+      setError('Please enter a Transcript ID');
       return;
     }
 
@@ -45,14 +46,19 @@ function ViewTranscript() {
       for await (const field of ipfs.cat(cid)){
         fields.push(field);
       }
+
       //create a single json file with all of the data
-      const data = JSON.parse(Buffer.concat(fields).toString());
+      //decrypt
+      const encryptedFormData = Buffer.concat(fields).toString();
+      
+      const decryptedFormData = decrypt(encryptedFormData);
+      const data = JSON.parse(decryptedFormData);
      
       console.log('Fetched transcript data from IPFS: ', data);
       setTranscript(data);
       
     } catch (error) {
-      setError('Failed to fetch transcript. Please check the CID and try again.');
+      setError('Failed to fetch transcript. Please check the id and try again.');
     }
   };
 
@@ -69,7 +75,7 @@ function ViewTranscript() {
           type="text"
           value={cid}
           onChange={(e) => setCid(e.target.value)}
-          placeholder="Enter CID"
+          placeholder="Enter Transcript Id"
           className={styles.input}
           disabled={!isInitialized}
         />
