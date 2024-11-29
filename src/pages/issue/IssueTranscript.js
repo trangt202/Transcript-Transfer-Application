@@ -60,6 +60,7 @@ function IssueTranscript() {
       return;
     }
 
+
     try {
       
       const ipfsData = JSON.stringify(formData);

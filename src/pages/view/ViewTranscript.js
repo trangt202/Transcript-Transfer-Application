@@ -40,6 +40,8 @@ function ViewTranscript() {
     }
 
     try {
+    
+    	
       
       const fields = [];
       //get input for every field of the transcript form
@@ -54,7 +56,7 @@ function ViewTranscript() {
       const decryptedFormData = decrypt(encryptedFormData);
       const data = JSON.parse(decryptedFormData);
      
-      console.log('Fetched transcript data from IPFS: ', data);
+      //console.log('Fetched transcript data from IPFS: ', data);
       setTranscript(data);
       
     } catch (error) {
